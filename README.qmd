@@ -1,0 +1,49 @@
+---
+title: "DTSA 5511 Introduction to Machine Learning: Deep Learning"
+subtitle: "Final Report: Using Deep Learning to Model Ocean Surface Elevation using Real World Data"
+author:
+    - name: Andrew Simms
+      affiliation: University of Colorado Boulder
+
+date: today
+
+bibliography: ./quarto/ref.bib
+---
+
+# Overview
+
+Ocean wave prediction is used for maritime safety, wave energy conversion, and coastal
+engineering applications. This research explores deep learning approaches for predicting ocean
+surface elevation time-series using historical buoy measurements. While traditional wave analysis
+relies on [statistical parameters](https://www.coastalwiki.org/wiki/Statistical_description_of_wave_parameters) including significant wave height ($H_{m_0}$) and energy period
+($T_e$), many applications could benefit from more accurate wave-by-wave predictions of surface elevation.
+
+The need for accurate wave prediction is particularly evident in [wave
+energy](https://tethys.pnnl.gov/technology/wave) applications, where @ringwood_2020 highlights
+challenges in control system optimization that depend on reliable wave forecasts. @abd_2016
+demonstrates how wave predictions enable real-time optimization of energy extraction, showing that
+accurate forecasting directly impacts system performance and efficiency.
+
+This project addresses the fundamental need for accurate near real-time wave prediction by
+developing deep learning models to forecast three-dimensional surface elevation time-series,
+focusing on maintaining both prediction accuracy and computational efficiency through models trained
+on previously collected measurements.
+
+
+The full report can be viewed [here](http://www.andrewdsimms.com/ocean_surface_elevation_deep_learning/).
+
+
+# Model Code
+
+Models and training code are in `./train_window_from_spec.py`
+
+Report source code is in `./quarto/index.qmd`. Rendered documents `./final_report.ipynb` (image
+rendering is not working),  `./final_roport.pdf` (tables not working) and the final output can
+be viewed [here](http://www.andrewdsimms.com/ocean_surface_elevation_deep_learning/).
+
+
+# Running Models
+
+```
+./batch_train.sh
+```

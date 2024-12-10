@@ -1,0 +1,2511 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-html/tabby.min.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dd08061cb7210c315e315379d94beb87.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.6.39">
+
+  <meta name="author" content="Andrew Simms">
+  <meta name="dcterms.date" content="2024-12-09">
+  <title>Using Deep Learning to Model Ocean Waves using Real World Data – DTSA 5511 Final Presentation</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="site_libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="site_libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+      }
+    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+    div.sourceCode
+      { color: #f8f8f2; background-color: #2e3440; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #f8f8f2; } /* Normal */
+    code span.al { color: #ff5555; font-weight: bold; } /* Alert */
+    code span.an { color: #75715e; } /* Annotation */
+    code span.at { color: #f92672; } /* Attribute */
+    code span.bn { color: #ae81ff; } /* BaseN */
+    code span.bu { color: #66d9ef; } /* BuiltIn */
+    code span.cf { color: #f92672; } /* ControlFlow */
+    code span.ch { color: #e6db74; } /* Char */
+    code span.cn { color: #ae81ff; } /* Constant */
+    code span.co { color: #75715e; } /* Comment */
+    code span.cv { color: #75715e; } /* CommentVar */
+    code span.do { color: #75715e; } /* Documentation */
+    code span.dt { color: #66d9ef; font-style: italic; } /* DataType */
+    code span.dv { color: #ae81ff; } /* DecVal */
+    code span.er { color: #ff5555; text-decoration: underline; } /* Error */
+    code span.ex { color: #a6e22e; font-weight: bold; } /* Extension */
+    code span.fl { color: #ae81ff; } /* Float */
+    code span.fu { color: #a6e22e; } /* Function */
+    code span.im { color: #f92672; } /* Import */
+    code span.in { color: #f1fa8c; } /* Information */
+    code span.kw { color: #f92672; } /* Keyword */
+    code span.op { color: #f8f8f2; } /* Operator */
+    code span.ot { color: #a6e22e; } /* Other */
+    code span.pp { color: #f92672; } /* Preprocessor */
+    code span.re { color: #75715e; } /* RegionMarker */
+    code span.sc { color: #ae81ff; } /* SpecialChar */
+    code span.ss { color: #e6db74; } /* SpecialString */
+    code span.st { color: #e6db74; } /* String */
+    code span.va { color: #f8f8f2; } /* Variable */
+    code span.vs { color: #e6db74; } /* VerbatimString */
+    code span.wa { color: #ff5555; } /* Warning */
+    /* CSS for citations */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+      margin-bottom: 0em;
+    }
+    .hanging-indent div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }  </style>
+  <link rel="stylesheet" href="site_libs/revealjs/dist/theme/quarto-ba3285d5e464443dc8180ee5e93fd8bc.css">
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+  <link href="site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+  
+  <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">DTSA 5511 Final Presentation</h1>
+  <p class="subtitle">Using Deep Learning to Model Ocean Surface Elevation using Real World Data</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Andrew Simms 
+</div>
+        <p class="quarto-title-affiliation">
+            University of Colorado Boulder
+          </p>
+    </div>
+</div>
+
+  <p class="date">2024-12-09</p>
+</section>
+<section id="introduction" class="title-slide slide level1 center">
+<h1>Introduction</h1>
+<div class="columns">
+<div class="column" style="width:50%;">
+<ul>
+<li>Improved ocean surface elevation prediction could benefit ocean engineering and wave energy</li>
+<li>Project uses deep learning to forecast surface elevation from buoy data</li>
+<li>Goal is accurate real-time prediction to improve:
+<ul>
+<li>Ocean Structure Designs
+<ul>
+<li>Fatigue</li>
+<li>Safety Factors</li>
+</ul></li>
+<li>Wave Energy Converters
+<ul>
+<li>Capture Efficiency</li>
+<li>Fatigue</li>
+</ul></li>
+</ul></li>
+<li>Presentation is a summary of results
+<ul>
+<li>Full resorts in report</li>
+</ul></li>
+</ul>
+</div><div class="column" style="width:50%;">
+<div id="fig-cdi4-202" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-cdi4-202-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="./img/cdip_202.2.png" height="500">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cdi4-202-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Datawell Mark III Wave Measurement Instrument Deployed by CDIP. Photo by <a href="https://www.pacioos.hawaii.edu/metadata/cdip_202.html">PacIOOS/Kimball Millikan</a>
+</figcaption>
+</figure>
+</div>
+</div></div>
+</section>
+
+<section id="locations" class="title-slide slide level1 center">
+<h1>Locations</h1>
+<div class="columns">
+<div class="column" style="width:50%;">
+<ul>
+<li><p>Two strategic sites chosen for long-term data and seasonal variations</p></li>
+<li><p>Kaneohe Bay, Hawaii (CDIP 225):</p>
+<ul>
+<li>Deep water site (84m) at Navy’s Wave Energy Test Site</li>
+<li>Mixed climate with trade winds and Pacific swells</li>
+<li>Consistent conditions, data since 2012</li>
+</ul></li>
+<li><p>Nags Head, North Carolina (CDIP 243):</p>
+<ul>
+<li>Intermediate depth (21m) near Jennette’s Pier Wave Energy Center</li>
+<li>Wind-driven waves with high variability from Cape Hatteras weather</li>
+<li>Experiences severe storms and tropical cyclones, data since 2017</li>
+</ul></li>
+</ul>
+</div><div class="column" style="width:50%;">
+<div id="cell-fig-wave-wets-map" class="cell" data-execution_count="1">
+<div id="fig-wave-wets-map" class="cell-output cell-output-display quarto-float quarto-figure quarto-figure-center" data-execution_count="48">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-wave-wets-map-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div style="width:100%;"><div style="position:relative;width:100%;height:0;padding-bottom:60%;"><span style="color:#565656">Make this Notebook Trusted to load map: File -&gt; Trust Notebook</span><iframe srcdoc="<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=UTF-8&quot; />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js&quot;></script>
+    <script src=&quot;https://code.jquery.com/jquery-3.7.1.min.js&quot;></script>
+    <script src=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js&quot;></script>
+    <script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js&quot;></script>
+    <link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css&quot;/>
+    <link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css&quot;/>
+    <link rel=&quot;stylesheet&quot; href=&quot;https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css&quot;/>
+    <link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css&quot;/>
+    <link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css&quot;/>
+    <link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css&quot;/>
+    
+            <meta name=&quot;viewport&quot; content=&quot;width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; />
+            <style>
+                #map_401132b1acd2d7068aacb19afc8bd274 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+        
+</head>
+<body>
+    
+    
+            <div class=&quot;folium-map&quot; id=&quot;map_401132b1acd2d7068aacb19afc8bd274&quot; ></div>
+        
+</body>
+<script>
+    
+    
+            var map_401132b1acd2d7068aacb19afc8bd274 = L.map(
+                &quot;map_401132b1acd2d7068aacb19afc8bd274&quot;,
+                {
+                    center: [21.4774, -157.75684],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 8,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_946c53cd1077436af2c4ad5c8e0028c3 = L.tileLayer(
+                &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
+                {&quot;attribution&quot;: &quot;\u0026copy; \u003ca href=\&quot;https://www.openstreetmap.org/copyright\&quot;\u003eOpenStreetMap\u003c/a\u003e contributors&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 19, &quot;maxZoom&quot;: 19, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
+            );
+        
+    
+            tile_layer_946c53cd1077436af2c4ad5c8e0028c3.addTo(map_401132b1acd2d7068aacb19afc8bd274);
+        
+    
+            var marker_81d1b09e6ddf11081f093e1d83ed1330 = L.marker(
+                [21.4774, -157.75684],
+                {}
+            ).addTo(map_401132b1acd2d7068aacb19afc8bd274);
+        
+    
+            var icon_8867fae94be9a0f627284314e586bc23 = L.AwesomeMarkers.icon(
+                {&quot;extraClasses&quot;: &quot;fa-rotate-0&quot;, &quot;icon&quot;: &quot;info-sign&quot;, &quot;iconColor&quot;: &quot;white&quot;, &quot;markerColor&quot;: &quot;red&quot;, &quot;prefix&quot;: &quot;glyphicon&quot;}
+            );
+            marker_81d1b09e6ddf11081f093e1d83ed1330.setIcon(icon_8867fae94be9a0f627284314e586bc23);
+        
+    
+        var popup_9a03fa1b35068bd990c2f38bb9ace690 = L.popup({&quot;maxWidth&quot;: &quot;100%&quot;});
+
+        
+            
+                var html_a231a5f352215365c5b94110728216d7 = $(`<div id=&quot;html_a231a5f352215365c5b94110728216d7&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;>CDIP 225 - WETS Hawaii</div>`)[0];
+                popup_9a03fa1b35068bd990c2f38bb9ace690.setContent(html_a231a5f352215365c5b94110728216d7);
+            
+        
+
+        marker_81d1b09e6ddf11081f093e1d83ed1330.bindPopup(popup_9a03fa1b35068bd990c2f38bb9ace690)
+        ;
+
+        
+    
+</script>
+</html>" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen="" webkitallowfullscreen="" mozallowfullscreen=""></iframe></div></div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-wave-wets-map-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Map of CDIP Buoy 225 Location at the Wave Energy Test Site, Kaneohe Bay, Oahu, HI
+</figcaption>
+</figure>
+</div>
+</div>
+<div id="cell-fig-wave-nags-head-map" class="cell" data-execution_count="2">
+<div id="fig-wave-nags-head-map" class="cell-output cell-output-display quarto-float quarto-figure quarto-figure-center" data-execution_count="49">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-wave-nags-head-map-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div style="width:100%;"><div style="position:relative;width:100%;height:0;padding-bottom:60%;"><span style="color:#565656">Make this Notebook Trusted to load map: File -&gt; Trust Notebook</span><iframe srcdoc="<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=UTF-8&quot; />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js&quot;></script>
+    <script src=&quot;https://code.jquery.com/jquery-3.7.1.min.js&quot;></script>
+    <script src=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js&quot;></script>
+    <script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js&quot;></script>
+    <link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css&quot;/>
+    <link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css&quot;/>
+    <link rel=&quot;stylesheet&quot; href=&quot;https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css&quot;/>
+    <link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css&quot;/>
+    <link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css&quot;/>
+    <link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css&quot;/>
+    
+            <meta name=&quot;viewport&quot; content=&quot;width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; />
+            <style>
+                #map_9bc570ef5ef6c8753a82e7f074cc93d3 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+        
+</head>
+<body>
+    
+    
+            <div class=&quot;folium-map&quot; id=&quot;map_9bc570ef5ef6c8753a82e7f074cc93d3&quot; ></div>
+        
+</body>
+<script>
+    
+    
+            var map_9bc570ef5ef6c8753a82e7f074cc93d3 = L.map(
+                &quot;map_9bc570ef5ef6c8753a82e7f074cc93d3&quot;,
+                {
+                    center: [36.0015, -75.4209],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 8,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_35e963af4215be8fe04b8a8d2a6772a6 = L.tileLayer(
+                &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
+                {&quot;attribution&quot;: &quot;\u0026copy; \u003ca href=\&quot;https://www.openstreetmap.org/copyright\&quot;\u003eOpenStreetMap\u003c/a\u003e contributors&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 19, &quot;maxZoom&quot;: 19, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
+            );
+        
+    
+            tile_layer_35e963af4215be8fe04b8a8d2a6772a6.addTo(map_9bc570ef5ef6c8753a82e7f074cc93d3);
+        
+    
+            var marker_78823d143f312753c20d3125f64dcde2 = L.marker(
+                [36.0015, -75.4209],
+                {}
+            ).addTo(map_9bc570ef5ef6c8753a82e7f074cc93d3);
+        
+    
+            var icon_910d9a29fb9123733658c299b19835cc = L.AwesomeMarkers.icon(
+                {&quot;extraClasses&quot;: &quot;fa-rotate-0&quot;, &quot;icon&quot;: &quot;info-sign&quot;, &quot;iconColor&quot;: &quot;white&quot;, &quot;markerColor&quot;: &quot;red&quot;, &quot;prefix&quot;: &quot;glyphicon&quot;}
+            );
+            marker_78823d143f312753c20d3125f64dcde2.setIcon(icon_910d9a29fb9123733658c299b19835cc);
+        
+    
+        var popup_8893dc6881d7acde45d1e645e8e92f05 = L.popup({&quot;maxWidth&quot;: &quot;100%&quot;});
+
+        
+            
+                var html_6180190ee3063ef76efa528077043fbd = $(`<div id=&quot;html_6180190ee3063ef76efa528077043fbd&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;>CDIP 243 - Nags Head NC</div>`)[0];
+                popup_8893dc6881d7acde45d1e645e8e92f05.setContent(html_6180190ee3063ef76efa528077043fbd);
+            
+        
+
+        marker_78823d143f312753c20d3125f64dcde2.bindPopup(popup_8893dc6881d7acde45d1e645e8e92f05)
+        ;
+
+        
+    
+</script>
+</html>" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen="" webkitallowfullscreen="" mozallowfullscreen=""></iframe></div></div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-wave-nags-head-map-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Map of CDIP Buoy 243 Location in Nags Head, NC
+</figcaption>
+</figure>
+</div>
+</div>
+</div></div>
+</section>
+
+<section id="data-acquisition-hardware" class="title-slide slide level1 center">
+<h1>Data Acquisition Hardware</h1>
+<div class="columns">
+<div class="column" style="width:50%;">
+<ul>
+<li><p>Datawell Waverider DWR-MkIII buoys sample at 1.28 Hz</p></li>
+<li><p>Captures 3D displacement measurements for wave motion</p></li>
+<li><p>Data undergoes CDIP quality control and processing</p></li>
+<li><p>Tracks buoy movement in three dimensions:</p>
+<ul>
+<li>Vertical (Z)</li>
+<li>East-West (X)</li>
+<li>North-South (Y)</li>
+</ul></li>
+<li><p>Aim is to forecast real-time displacements using historical data from all axes</p></li>
+</ul>
+</div><div class="column" style="width:50%;">
+<div id="fig-cdip-cook-inlet" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-cdip-cook-inlet-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="./img/Wave_buoy_Cook_Inlet_2011_low_res-1024x627.jpg" width="350">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cdip-cook-inlet-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: CDIP Buoy 204 Deployed in Lower Cook Inlet Alaska. Photo from <a href="https://legacy.aoos.org/cook-inlet-wave-buoy-up-and-running/">AOOS</a>
+</figcaption>
+</figure>
+</div>
+<div id="fig-buoy-movement" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-buoy-movement-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="./img/buoy-reference_frame.svg" width="350">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-buoy-movement-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: Directional Reference Frame of Datawell Waverider DWR-MkIII Buoy
+</figcaption>
+</figure>
+</div>
+</div></div>
+</section>
+
+<section id="sec-dl-overview" class="title-slide slide level1 center">
+<h1>Deep Learning Architecture Overview</h1>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Model Architecture:</strong></p>
+<ul>
+<li>Uses two approaches: Long Short-Term Memory (LSTM) networks introduced by <span class="citation" data-cites="LSTM_paper">Hochreiter and Schmidhuber (<a href="#/references" role="doc-biblioref" onclick="">1997</a>)</span> and Transformers by <span class="citation" data-cites="attention_paper">Vaswani et al. (<a href="#/references" role="doc-biblioref" onclick="">2023</a>)</span></li>
+<li>LSTM captures long-term dependencies in temporal sequences</li>
+<li>Transformers process sequential data using self-attention mechanisms</li>
+</ul>
+<p><strong>Implementation:</strong></p>
+<ul>
+<li>Built using PyTorch <span class="citation" data-cites="pytorch">(<a href="#/references" role="doc-biblioref" onclick="">Ansel et al. 2024</a>)</span> framework</li>
+<li>Builds on previous wave forecasting work with neural networks</li>
+<li>Enables direct comparison between LSTM and Transformer performance</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<div id="fig-lstm-cell" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-lstm-cell-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="./img/LSTM_cell.svg">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-lstm-cell-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: LSTM Cell Visualization. From <span class="citation" data-cites="wiki:lstm_cell">Wikimedia Commons (<a href="#/references" role="doc-biblioref" onclick="">2024</a>)</span>
+</figcaption>
+</figure>
+</div>
+<div id="fig-trans-arch" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-trans-arch-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="./img/transformer_arch.png" height="200">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-trans-arch-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7: Transformer Architecture Drawing from <span class="citation" data-cites="LSTM_paper">Hochreiter and Schmidhuber (<a href="#/references" role="doc-biblioref" onclick="">1997</a>)</span>
+</figcaption>
+</figure>
+</div>
+</div></div>
+</section>
+
+<section id="exploratory-data-analysis---displacement" class="title-slide slide level1 center">
+<h1>Exploratory Data Analysis - Displacement</h1>
+<div class="columns">
+<div class="column" style="width:40%;">
+<ul>
+<li><strong>Data Collection &amp; Processing:</strong>
+<ul>
+<li>CDIP buoys use integrated sensor arrays (accelerometers, magnetometers, GPS)</li>
+<li>Captures high-resolution 3D wave motion in real-time</li>
+<li><a href="#/fig-displacement" class="quarto-xref">Figure&nbsp;8</a> shows typical wave patterns (CDIP 225, Nov 2017)</li>
+</ul></li>
+<li><strong>Data Characteristics:</strong>
+<ul>
+<li>Three displacement components: vertical, N/S, E/W</li>
+<li>Non-linear wave patterns evident in measurements</li>
+<li>Well-suited for deep learning modeling approaches</li>
+</ul></li>
+</ul>
+</div><div class="column" style="width:60%;">
+<div class="cell" data-layout-nrow="3" data-execution_count="3">
+<div id="fig-displacement" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-displacement-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-displacement" style="flex-basis: 100.0%;justify-content: flex-start;">
+<div id="fig-displacement-1" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-displacement-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-displacement-output-1.svg" data-ref-parent="fig-displacement">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-displacement-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) Vertical (Z) Displacement
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-displacement" style="flex-basis: 100.0%;justify-content: flex-start;">
+<div id="fig-displacement-2" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-displacement-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-displacement-output-2.svg" data-ref-parent="fig-displacement">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-displacement-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) North/South (Y) Displacement
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-displacement" style="flex-basis: 100.0%;justify-content: flex-start;">
+<div id="fig-displacement-3" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-displacement-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-displacement-output-3.svg" data-ref-parent="fig-displacement">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-displacement-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(c) East/West (X) Displacement
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-displacement-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8: CDIP 225 30 minutes of Displacement - November 11, 2017 @ 11 am. Data from <span class="citation" data-cites="cdip_wets">Coastal Data Information Program (<a href="#/references" role="doc-biblioref" onclick="">2023</a>)</span>
+</figcaption>
+</figure>
+</div>
+</div>
+</div></div>
+</section>
+
+<section id="eda---displacement-zoomed" class="title-slide slide level1 center">
+<h1>EDA - Displacement Zoomed</h1>
+<div class="cell" data-layout-nrow="3" data-execution_count="4">
+<div id="fig-displacement-zoomed" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-displacement-zoomed-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-displacement-zoomed" style="flex-basis: 100.0%;justify-content: flex-start;">
+<div id="fig-displacement-zoomed-1" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-displacement-zoomed-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-displacement-zoomed-output-1.svg" data-ref-parent="fig-displacement-zoomed">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-displacement-zoomed-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) Vertical (Z) Displacement
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-displacement-zoomed" style="flex-basis: 100.0%;justify-content: flex-start;">
+<div id="fig-displacement-zoomed-2" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-displacement-zoomed-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-displacement-zoomed-output-2.svg" data-ref-parent="fig-displacement-zoomed">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-displacement-zoomed-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) North/South (Y) Displacement
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-displacement-zoomed" style="flex-basis: 100.0%;justify-content: flex-start;">
+<div id="fig-displacement-zoomed-3" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-displacement-zoomed-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-displacement-zoomed-output-3.svg" data-ref-parent="fig-displacement-zoomed">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-displacement-zoomed-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(c) East/West (X) Displacement
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-displacement-zoomed-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9: CDIP 225 1.5 minutes of Displacement - November 11, 2017 @ 11 am. Data from <span class="citation" data-cites="cdip_wets">Coastal Data Information Program (<a href="#/references" role="doc-biblioref" onclick="">2023</a>)</span>
+</figcaption>
+</figure>
+</div>
+</div>
+</section>
+
+<section id="available-displacement-data" class="title-slide slide level1 center">
+<h1>Available Displacement Data</h1>
+<div id="cell-fig-stats-count" class="cell" data-execution_count="7">
+<div class="cell-output cell-output-display">
+<div id="fig-stats-count" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-stats-count-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-stats-count-output-1.svg">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-stats-count-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;10: Available Data: Sample Count
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-fig-stats-range" class="cell" data-execution_count="8">
+<div class="cell-output cell-output-display">
+<div id="fig-stats-range" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-stats-range-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-stats-range-output-1.svg">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-stats-range-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;11: Available Data: Range [m]
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="10">
+<div id="tbl-duration" class="cell quarto-float quarto-figure quarto-figure-center" data-execution_count="10">
+<figure class="quarto-float quarto-float-tbl">
+<div aria-describedby="tbl-duration-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output cell-output-display" data-execution_count="57">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+
+<table class="dataframe do-not-create-environment cell" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header" style="text-align: right;">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Start Date [UTC]</th>
+<th data-quarto-table-cell-role="th">End Date [UTC]</th>
+<th data-quarto-table-cell-role="th">Duration</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>2016-08-26 22:00</td>
+<td>2024-09-11 19:00</td>
+<td>8 years, 17 days</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2018-08-26 15:00</td>
+<td>2023-07-13 00:00</td>
+<td>4 years, 10 months, 21 days</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-tbl" id="tbl-duration-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1: Temporal Details of Downloaded CDIP Data
+</figcaption>
+</figure>
+</div>
+</div>
+</section>
+
+<section id="data-cleaning" class="title-slide slide level1 center">
+<h1>Data Cleaning</h1>
+<div class="columns">
+<div class="column" style="width:45%;">
+<ul>
+<li>Original multi-year data exceeds reasonable training capacity</li>
+<li>Use statistical methods to compute 30 minute statistics
+<ul>
+<li>MHKiT-Python transforms data to 30-minute statistics</li>
+<li>Key parameters:
+<ul>
+<li>Significant wave height (<span class="math inline">H_{m_0}</span>)</li>
+<li>Energy period (<span class="math inline">T_e</span>)</li>
+<li>Omnidirectional wave energy flux (<span class="math inline">J</span>)</li>
+</ul></li>
+</ul></li>
+<li>Use these statistics to identify unique wave conditions for model training</li>
+</ul>
+</div><div class="column" style="width:55%;">
+<div id="dc079017" class="cell" data-execution_count="11">
+<div id="lst-mhkit" class="python cell-code listing quarto-float quarto-figure quarto-figure-left" data-code-fold="false">
+<figure class="quarto-float quarto-float-lst">
+<div aria-describedby="lst-mhkit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="sourceCode cell-code" id="lst-mhkit" data-code-fold="false"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="lst-mhkit-1"><a href="#lst-mhkit-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> mhkit.wave <span class="im">as</span> wave</span>
+<span id="lst-mhkit-2"><a href="#lst-mhkit-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="lst-mhkit-3"><a href="#lst-mhkit-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="lst-mhkit-4"><a href="#lst-mhkit-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calculate_wave_qoi(input_df, station_number, path):</span>
+<span id="lst-mhkit-5"><a href="#lst-mhkit-5" aria-hidden="true" tabindex="-1"></a>    input_df <span class="op">=</span> input_df.dropna(axis<span class="op">=</span><span class="st">"index"</span>)</span>
+<span id="lst-mhkit-6"><a href="#lst-mhkit-6" aria-hidden="true" tabindex="-1"></a>    column <span class="op">=</span> <span class="st">"vert_displacement_meters"</span></span>
+<span id="lst-mhkit-7"><a href="#lst-mhkit-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="lst-mhkit-8"><a href="#lst-mhkit-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(input_df) <span class="op">!=</span> <span class="dv">2304</span>:</span>
+<span id="lst-mhkit-9"><a href="#lst-mhkit-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">None</span></span>
+<span id="lst-mhkit-10"><a href="#lst-mhkit-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="lst-mhkit-11"><a href="#lst-mhkit-11" aria-hidden="true" tabindex="-1"></a>    sample_rate_hz <span class="op">=</span> <span class="fl">1.28</span></span>
+<span id="lst-mhkit-12"><a href="#lst-mhkit-12" aria-hidden="true" tabindex="-1"></a>    n_fft <span class="op">=</span> <span class="dv">256</span></span>
+<span id="lst-mhkit-13"><a href="#lst-mhkit-13" aria-hidden="true" tabindex="-1"></a>    window <span class="op">=</span> <span class="st">"hann"</span></span>
+<span id="lst-mhkit-14"><a href="#lst-mhkit-14" aria-hidden="true" tabindex="-1"></a>    detrend <span class="op">=</span> <span class="va">True</span></span>
+<span id="lst-mhkit-15"><a href="#lst-mhkit-15" aria-hidden="true" tabindex="-1"></a>    surface_elevation <span class="op">=</span> pd.DataFrame(input_df[column].iloc[:<span class="dv">2048</span>])</span>
+<span id="lst-mhkit-16"><a href="#lst-mhkit-16" aria-hidden="true" tabindex="-1"></a>    spectra <span class="op">=</span> wave.resource.elevation_spectrum(</span>
+<span id="lst-mhkit-17"><a href="#lst-mhkit-17" aria-hidden="true" tabindex="-1"></a>        surface_elevation, sample_rate_hz, n_fft, window<span class="op">=</span>window, detrend<span class="op">=</span>detrend</span>
+<span id="lst-mhkit-18"><a href="#lst-mhkit-18" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="lst-mhkit-19"><a href="#lst-mhkit-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="lst-mhkit-20"><a href="#lst-mhkit-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {</span>
+<span id="lst-mhkit-21"><a href="#lst-mhkit-21" aria-hidden="true" tabindex="-1"></a>        <span class="st">"time"</span>: input_df.index[<span class="dv">0</span>],</span>
+<span id="lst-mhkit-22"><a href="#lst-mhkit-22" aria-hidden="true" tabindex="-1"></a>        <span class="st">"significant_wave_height_meters"</span>: wave.resource.significant_wave_height(spectra)[<span class="st">"Hm0"</span>].to_list()[<span class="dv">0</span>],  <span class="co"># type: ignore</span></span>
+<span id="lst-mhkit-23"><a href="#lst-mhkit-23" aria-hidden="true" tabindex="-1"></a>        <span class="st">"energy_period_seconds"</span>: wave.resource.energy_period(spectra)[<span class="st">"Te"</span>].to_list()[<span class="dv">0</span>],  <span class="co"># type: ignore</span></span>
+<span id="lst-mhkit-24"><a href="#lst-mhkit-24" aria-hidden="true" tabindex="-1"></a>        <span class="st">"omnidirectional_wave_energy_flux"</span>: wave.resource.energy_flux(spectra, np.nan, deep<span class="op">=</span><span class="va">True</span>)[<span class="st">"J"</span>].to_list()[<span class="dv">0</span>],  <span class="co"># type: ignore</span></span>
+<span id="lst-mhkit-25"><a href="#lst-mhkit-25" aria-hidden="true" tabindex="-1"></a>        <span class="st">"station_number"</span>: station_number,</span>
+<span id="lst-mhkit-26"><a href="#lst-mhkit-26" aria-hidden="true" tabindex="-1"></a>        <span class="st">"path"</span>: <span class="bu">str</span>(path),</span>
+<span id="lst-mhkit-27"><a href="#lst-mhkit-27" aria-hidden="true" tabindex="-1"></a>    }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-lst" id="lst-mhkit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Listing&nbsp;1: Calculation of Wave Quantities of Interest from Displacement
+</figcaption>
+</figure>
+</div>
+</div>
+</div></div>
+</section>
+
+<section id="wave-statistics-vs.-time" class="title-slide slide level1 center">
+<h1>Wave Statistics vs.&nbsp;Time</h1>
+<div id="fig-wave-stats-hm0" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-wave-stats-hm0-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-wave-stats-hm0" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-wave-stats-hm0-1" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-wave-stats-hm0-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-wave-stats-hm0-output-1.svg" data-ref-parent="fig-wave-stats-hm0">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-wave-stats-hm0-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) Wave Energy Test Site - Hawaii
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-wave-stats-hm0" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-wave-stats-hm0-2" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-wave-stats-hm0-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-wave-stats-hm0-output-2.svg" data-ref-parent="fig-wave-stats-hm0">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-wave-stats-hm0-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) Nags Head - North Carolina
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-wave-stats-hm0-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;12: Significant Wave Height, <span class="math inline">H_{m_0}</span> [<span class="math inline">m</span>]
+</figcaption>
+</figure>
+</div>
+<div id="fig-wave-stats-te" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-wave-stats-te-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-wave-stats-te" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-wave-stats-te-1" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-wave-stats-te-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-wave-stats-te-output-1.svg" data-ref-parent="fig-wave-stats-te">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-wave-stats-te-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) Wave Energy Test Site - Hawaii
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-wave-stats-te" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-wave-stats-te-2" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-wave-stats-te-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-wave-stats-te-output-2.svg" data-ref-parent="fig-wave-stats-te">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-wave-stats-te-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) Nags Head - North Carolina
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-wave-stats-te-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;13: Energy Period, <span class="math inline">T_e</span> [<span class="math inline">s</span>]
+</figcaption>
+</figure>
+</div>
+<div id="fig-wave-stats-j" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-wave-stats-j-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-wave-stats-j" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-wave-stats-j-1" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-wave-stats-j-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-wave-stats-j-output-1.svg" data-ref-parent="fig-wave-stats-j">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-wave-stats-j-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) Wave Energy Test Site - Hawaii
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-wave-stats-j" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-wave-stats-j-2" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-wave-stats-j-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-wave-stats-j-output-2.svg" data-ref-parent="fig-wave-stats-j">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-wave-stats-j-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) Nags Head - North Carolina
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-wave-stats-j-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;14: Omnidirectional Wave Energy Flux (Wave Power), <span class="math inline">J</span> [<span class="math inline">W/m</span>]
+</figcaption>
+</figure>
+</div>
+</section>
+
+<section id="wave-classification-dataset-creation-method" class="title-slide slide level1 center">
+<h1>Wave Classification Dataset Creation Method</h1>
+<div class="columns">
+<div class="column" style="width:40%;">
+<ul>
+<li>Classify data into 30 minute bins:
+<ul>
+<li>Categorizes data using wave height (<span class="math inline">H_{m_0}</span>) and energy period (<span class="math inline">T_e</span>)</li>
+<li>Creates sea state matrices to show wave condition frequency</li>
+<li>Ensures training data covers diverse wave states</li>
+</ul></li>
+<li>Sample data from bins by count:
+<ul>
+<li>Use random sampling to pick a single 30 minute dataset from each bin</li>
+<li>Option to pick more samples</li>
+</ul></li>
+<li>Yields:
+<ul>
+<li>Unique 30 minute data bins</li>
+<li>76 for CDIP 225 in Kaneohe Bay, Hawaii</li>
+<li>112 for CDIP 243 in Nags Head, NC</li>
+</ul></li>
+</ul>
+</div><div class="column" style="width:60%;">
+<div id="cell-fig-wave-stats-225-count" class="cell" data-execution_count="18">
+<div class="cell-output cell-output-display">
+<div id="fig-wave-stats-225-count" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-wave-stats-225-count-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-wave-stats-225-count-output-1.svg">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-wave-stats-225-count-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;15: CDIP 225 Sea State Distribution: Wave Height (<span class="math inline">H_{m_0}</span>) vs Energy Period (<span class="math inline">T_e</span>)
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-fig-wave-stats-243-count" class="cell" data-execution_count="19">
+<div class="cell-output cell-output-display">
+<div id="fig-wave-stats-243-count" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-wave-stats-243-count-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-wave-stats-243-count-output-1.svg">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-wave-stats-243-count-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16: CDIP 243 Sea State Distribution: Wave Height (<span class="math inline">H_{m_0}</span>) vs Energy Period (<span class="math inline">T_e</span>)
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
+</section>
+
+<section id="deep-learning-models---lstm" class="title-slide slide level1 center">
+<h1>Deep Learning Models - LSTM</h1>
+<div class="columns">
+<div class="column" style="width:40%;">
+<ul>
+<li>Processes 3D displacement through stacked LSTM layers</li>
+<li>Uses dropout regularization for stability</li>
+<li>Final linear layer outputs displacement predictions</li>
+</ul>
+</div><div class="column" style="width:60%;">
+<div id="faedd92b" class="cell" data-execution_count="20">
+<div id="lst-lstm-model" class="python cell-code listing quarto-float quarto-figure quarto-figure-left" data-code-fold="false">
+<figure class="quarto-float quarto-float-lst">
+<div aria-describedby="lst-lstm-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="sourceCode cell-code" id="lst-lstm-model" data-code-fold="false"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="lst-lstm-model-1"><a href="#lst-lstm-model-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> LSTMModel(WavePredictionModel):</span>
+<span id="lst-lstm-model-2"><a href="#lst-lstm-model-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(</span>
+<span id="lst-lstm-model-3"><a href="#lst-lstm-model-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>,</span>
+<span id="lst-lstm-model-4"><a href="#lst-lstm-model-4" aria-hidden="true" tabindex="-1"></a>        input_dim: <span class="bu">int</span>,</span>
+<span id="lst-lstm-model-5"><a href="#lst-lstm-model-5" aria-hidden="true" tabindex="-1"></a>        hidden_dim: <span class="bu">int</span> <span class="op">=</span> <span class="dv">128</span>,</span>
+<span id="lst-lstm-model-6"><a href="#lst-lstm-model-6" aria-hidden="true" tabindex="-1"></a>        num_layers: <span class="bu">int</span> <span class="op">=</span> <span class="dv">2</span>,</span>
+<span id="lst-lstm-model-7"><a href="#lst-lstm-model-7" aria-hidden="true" tabindex="-1"></a>        dropout: <span class="bu">float</span> <span class="op">=</span> <span class="fl">0.2</span>,</span>
+<span id="lst-lstm-model-8"><a href="#lst-lstm-model-8" aria-hidden="true" tabindex="-1"></a>        learning_rate: <span class="bu">float</span> <span class="op">=</span> <span class="fl">1e-3</span>,</span>
+<span id="lst-lstm-model-9"><a href="#lst-lstm-model-9" aria-hidden="true" tabindex="-1"></a>    ):</span>
+<span id="lst-lstm-model-10"><a href="#lst-lstm-model-10" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>(input_dim, learning_rate)</span>
+<span id="lst-lstm-model-11"><a href="#lst-lstm-model-11" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.save_hyperparameters()  <span class="co"># Save all init parameters</span></span>
+<span id="lst-lstm-model-12"><a href="#lst-lstm-model-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="lst-lstm-model-13"><a href="#lst-lstm-model-13" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.hidden_dim <span class="op">=</span> hidden_dim</span>
+<span id="lst-lstm-model-14"><a href="#lst-lstm-model-14" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.num_layers <span class="op">=</span> num_layers</span>
+<span id="lst-lstm-model-15"><a href="#lst-lstm-model-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="lst-lstm-model-16"><a href="#lst-lstm-model-16" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.lstm <span class="op">=</span> nn.LSTM(</span>
+<span id="lst-lstm-model-17"><a href="#lst-lstm-model-17" aria-hidden="true" tabindex="-1"></a>            input_dim, hidden_dim, num_layers, batch_first<span class="op">=</span><span class="va">True</span>, dropout<span class="op">=</span>dropout</span>
+<span id="lst-lstm-model-18"><a href="#lst-lstm-model-18" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="lst-lstm-model-19"><a href="#lst-lstm-model-19" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.fc <span class="op">=</span> nn.Linear(hidden_dim, input_dim)</span>
+<span id="lst-lstm-model-20"><a href="#lst-lstm-model-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="lst-lstm-model-21"><a href="#lst-lstm-model-21" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x: torch.Tensor) <span class="op">-&gt;</span> torch.Tensor:</span>
+<span id="lst-lstm-model-22"><a href="#lst-lstm-model-22" aria-hidden="true" tabindex="-1"></a>        lstm_out, _ <span class="op">=</span> <span class="va">self</span>.lstm(x)</span>
+<span id="lst-lstm-model-23"><a href="#lst-lstm-model-23" aria-hidden="true" tabindex="-1"></a>        predictions <span class="op">=</span> <span class="va">self</span>.fc(lstm_out)</span>
+<span id="lst-lstm-model-24"><a href="#lst-lstm-model-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> predictions</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-lst" id="lst-lstm-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Listing&nbsp;2: Long Short-Term Memory PyTorch Model
+</figcaption>
+</figure>
+</div>
+</div>
+</div></div>
+</section>
+
+<section id="deep-learning-models---enhanced-lstm" class="title-slide slide level1 center">
+<h1>Deep Learning Models - Enhanced LSTM</h1>
+<div class="columns">
+<div class="column" style="width:40%;">
+<ul>
+<li>Bidirectional processing captures past/future context</li>
+<li>Skip connections maintain gradient flow</li>
+<li>Layer normalization stabilizes training</li>
+</ul>
+</div><div class="column" style="width:60%;">
+<div id="f2cb90ab" class="cell" data-execution_count="21">
+<div id="lst-enh-lstm-model" class="python cell-code listing quarto-float quarto-figure quarto-figure-left" data-code-fold="false">
+<figure class="quarto-float quarto-float-lst">
+<div aria-describedby="lst-enh-lstm-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="sourceCode cell-code" id="lst-enh-lstm-model" data-code-fold="false"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="lst-enh-lstm-model-1"><a href="#lst-enh-lstm-model-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> EnhancedLSTMModel(WavePredictionModel):</span>
+<span id="lst-enh-lstm-model-2"><a href="#lst-enh-lstm-model-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(</span>
+<span id="lst-enh-lstm-model-3"><a href="#lst-enh-lstm-model-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>,</span>
+<span id="lst-enh-lstm-model-4"><a href="#lst-enh-lstm-model-4" aria-hidden="true" tabindex="-1"></a>        input_dim: <span class="bu">int</span>,</span>
+<span id="lst-enh-lstm-model-5"><a href="#lst-enh-lstm-model-5" aria-hidden="true" tabindex="-1"></a>        hidden_dim: <span class="bu">int</span> <span class="op">=</span> <span class="dv">128</span>,</span>
+<span id="lst-enh-lstm-model-6"><a href="#lst-enh-lstm-model-6" aria-hidden="true" tabindex="-1"></a>        num_layers: <span class="bu">int</span> <span class="op">=</span> <span class="dv">2</span>,</span>
+<span id="lst-enh-lstm-model-7"><a href="#lst-enh-lstm-model-7" aria-hidden="true" tabindex="-1"></a>        dropout: <span class="bu">float</span> <span class="op">=</span> <span class="fl">0.2</span>,</span>
+<span id="lst-enh-lstm-model-8"><a href="#lst-enh-lstm-model-8" aria-hidden="true" tabindex="-1"></a>        learning_rate: <span class="bu">float</span> <span class="op">=</span> <span class="fl">1e-3</span>,</span>
+<span id="lst-enh-lstm-model-9"><a href="#lst-enh-lstm-model-9" aria-hidden="true" tabindex="-1"></a>        bidirectional: <span class="bu">bool</span> <span class="op">=</span> <span class="va">True</span>,</span>
+<span id="lst-enh-lstm-model-10"><a href="#lst-enh-lstm-model-10" aria-hidden="true" tabindex="-1"></a>    ):</span>
+<span id="lst-enh-lstm-model-11"><a href="#lst-enh-lstm-model-11" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>(input_dim, learning_rate)</span>
+<span id="lst-enh-lstm-model-12"><a href="#lst-enh-lstm-model-12" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.save_hyperparameters()</span>
+<span id="lst-enh-lstm-model-13"><a href="#lst-enh-lstm-model-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="lst-enh-lstm-model-14"><a href="#lst-enh-lstm-model-14" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.hidden_dim <span class="op">=</span> hidden_dim</span>
+<span id="lst-enh-lstm-model-15"><a href="#lst-enh-lstm-model-15" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.num_layers <span class="op">=</span> num_layers</span>
+<span id="lst-enh-lstm-model-16"><a href="#lst-enh-lstm-model-16" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.bidirectional <span class="op">=</span> bidirectional</span>
+<span id="lst-enh-lstm-model-17"><a href="#lst-enh-lstm-model-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="lst-enh-lstm-model-18"><a href="#lst-enh-lstm-model-18" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Input processing</span></span>
+<span id="lst-enh-lstm-model-19"><a href="#lst-enh-lstm-model-19" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.input_layer <span class="op">=</span> nn.Sequential(</span>
+<span id="lst-enh-lstm-model-20"><a href="#lst-enh-lstm-model-20" aria-hidden="true" tabindex="-1"></a>            nn.Linear(input_dim, hidden_dim),</span>
+<span id="lst-enh-lstm-model-21"><a href="#lst-enh-lstm-model-21" aria-hidden="true" tabindex="-1"></a>            nn.LayerNorm(hidden_dim),</span>
+<span id="lst-enh-lstm-model-22"><a href="#lst-enh-lstm-model-22" aria-hidden="true" tabindex="-1"></a>            nn.ReLU(),</span>
+<span id="lst-enh-lstm-model-23"><a href="#lst-enh-lstm-model-23" aria-hidden="true" tabindex="-1"></a>            nn.Dropout(dropout <span class="op">/</span> <span class="dv">2</span>),</span>
+<span id="lst-enh-lstm-model-24"><a href="#lst-enh-lstm-model-24" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="lst-enh-lstm-model-25"><a href="#lst-enh-lstm-model-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="lst-enh-lstm-model-26"><a href="#lst-enh-lstm-model-26" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Main LSTM layers with skip connections</span></span>
+<span id="lst-enh-lstm-model-27"><a href="#lst-enh-lstm-model-27" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.lstm_layers <span class="op">=</span> nn.ModuleList()</span>
+<span id="lst-enh-lstm-model-28"><a href="#lst-enh-lstm-model-28" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.layer_norms <span class="op">=</span> nn.ModuleList()</span>
+<span id="lst-enh-lstm-model-29"><a href="#lst-enh-lstm-model-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="lst-enh-lstm-model-30"><a href="#lst-enh-lstm-model-30" aria-hidden="true" tabindex="-1"></a>        lstm_input_dim <span class="op">=</span> hidden_dim</span>
+<span id="lst-enh-lstm-model-31"><a href="#lst-enh-lstm-model-31" aria-hidden="true" tabindex="-1"></a>        lstm_output_dim <span class="op">=</span> hidden_dim <span class="op">*</span> <span class="dv">2</span> <span class="cf">if</span> bidirectional <span class="cf">else</span> hidden_dim</span>
+<span id="lst-enh-lstm-model-32"><a href="#lst-enh-lstm-model-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="lst-enh-lstm-model-33"><a href="#lst-enh-lstm-model-33" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(num_layers):</span>
+<span id="lst-enh-lstm-model-34"><a href="#lst-enh-lstm-model-34" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.lstm_layers.append(</span>
+<span id="lst-enh-lstm-model-35"><a href="#lst-enh-lstm-model-35" aria-hidden="true" tabindex="-1"></a>                nn.LSTM(</span>
+<span id="lst-enh-lstm-model-36"><a href="#lst-enh-lstm-model-36" aria-hidden="true" tabindex="-1"></a>                    lstm_input_dim,</span>
+<span id="lst-enh-lstm-model-37"><a href="#lst-enh-lstm-model-37" aria-hidden="true" tabindex="-1"></a>                    hidden_dim,</span>
+<span id="lst-enh-lstm-model-38"><a href="#lst-enh-lstm-model-38" aria-hidden="true" tabindex="-1"></a>                    num_layers<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="lst-enh-lstm-model-39"><a href="#lst-enh-lstm-model-39" aria-hidden="true" tabindex="-1"></a>                    batch_first<span class="op">=</span><span class="va">True</span>,</span>
+<span id="lst-enh-lstm-model-40"><a href="#lst-enh-lstm-model-40" aria-hidden="true" tabindex="-1"></a>                    bidirectional<span class="op">=</span>bidirectional,</span>
+<span id="lst-enh-lstm-model-41"><a href="#lst-enh-lstm-model-41" aria-hidden="true" tabindex="-1"></a>                    dropout<span class="op">=</span><span class="dv">0</span>,</span>
+<span id="lst-enh-lstm-model-42"><a href="#lst-enh-lstm-model-42" aria-hidden="true" tabindex="-1"></a>                )</span>
+<span id="lst-enh-lstm-model-43"><a href="#lst-enh-lstm-model-43" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="lst-enh-lstm-model-44"><a href="#lst-enh-lstm-model-44" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.layer_norms.append(nn.LayerNorm(lstm_output_dim))</span>
+<span id="lst-enh-lstm-model-45"><a href="#lst-enh-lstm-model-45" aria-hidden="true" tabindex="-1"></a>            lstm_input_dim <span class="op">=</span> lstm_output_dim</span>
+<span id="lst-enh-lstm-model-46"><a href="#lst-enh-lstm-model-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="lst-enh-lstm-model-47"><a href="#lst-enh-lstm-model-47" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Output processing</span></span>
+<span id="lst-enh-lstm-model-48"><a href="#lst-enh-lstm-model-48" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.output_layers <span class="op">=</span> nn.ModuleList(</span>
+<span id="lst-enh-lstm-model-49"><a href="#lst-enh-lstm-model-49" aria-hidden="true" tabindex="-1"></a>            [</span>
+<span id="lst-enh-lstm-model-50"><a href="#lst-enh-lstm-model-50" aria-hidden="true" tabindex="-1"></a>                nn.Linear(lstm_output_dim, hidden_dim),</span>
+<span id="lst-enh-lstm-model-51"><a href="#lst-enh-lstm-model-51" aria-hidden="true" tabindex="-1"></a>                nn.Linear(hidden_dim, hidden_dim <span class="op">//</span> <span class="dv">2</span>),</span>
+<span id="lst-enh-lstm-model-52"><a href="#lst-enh-lstm-model-52" aria-hidden="true" tabindex="-1"></a>                nn.Linear(hidden_dim <span class="op">//</span> <span class="dv">2</span>, input_dim),</span>
+<span id="lst-enh-lstm-model-53"><a href="#lst-enh-lstm-model-53" aria-hidden="true" tabindex="-1"></a>            ]</span>
+<span id="lst-enh-lstm-model-54"><a href="#lst-enh-lstm-model-54" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="lst-enh-lstm-model-55"><a href="#lst-enh-lstm-model-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="lst-enh-lstm-model-56"><a href="#lst-enh-lstm-model-56" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.dropouts <span class="op">=</span> nn.ModuleList(</span>
+<span id="lst-enh-lstm-model-57"><a href="#lst-enh-lstm-model-57" aria-hidden="true" tabindex="-1"></a>            [nn.Dropout(dropout) <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(<span class="va">self</span>.output_layers))]</span>
+<span id="lst-enh-lstm-model-58"><a href="#lst-enh-lstm-model-58" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="lst-enh-lstm-model-59"><a href="#lst-enh-lstm-model-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="lst-enh-lstm-model-60"><a href="#lst-enh-lstm-model-60" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Skip connection</span></span>
+<span id="lst-enh-lstm-model-61"><a href="#lst-enh-lstm-model-61" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.skip_connection <span class="op">=</span> nn.Linear(input_dim, input_dim)</span>
+<span id="lst-enh-lstm-model-62"><a href="#lst-enh-lstm-model-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="lst-enh-lstm-model-63"><a href="#lst-enh-lstm-model-63" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x: torch.Tensor) <span class="op">-&gt;</span> torch.Tensor:</span>
+<span id="lst-enh-lstm-model-64"><a href="#lst-enh-lstm-model-64" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Store original input for skip connection</span></span>
+<span id="lst-enh-lstm-model-65"><a href="#lst-enh-lstm-model-65" aria-hidden="true" tabindex="-1"></a>        original_input <span class="op">=</span> x</span>
+<span id="lst-enh-lstm-model-66"><a href="#lst-enh-lstm-model-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="lst-enh-lstm-model-67"><a href="#lst-enh-lstm-model-67" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Input processing</span></span>
+<span id="lst-enh-lstm-model-68"><a href="#lst-enh-lstm-model-68" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> <span class="va">self</span>.input_layer(x)</span>
+<span id="lst-enh-lstm-model-69"><a href="#lst-enh-lstm-model-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="lst-enh-lstm-model-70"><a href="#lst-enh-lstm-model-70" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Process through LSTM layers with residual connections</span></span>
+<span id="lst-enh-lstm-model-71"><a href="#lst-enh-lstm-model-71" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> lstm, norm <span class="kw">in</span> <span class="bu">zip</span>(<span class="va">self</span>.lstm_layers, <span class="va">self</span>.layer_norms):</span>
+<span id="lst-enh-lstm-model-72"><a href="#lst-enh-lstm-model-72" aria-hidden="true" tabindex="-1"></a>            residual <span class="op">=</span> x</span>
+<span id="lst-enh-lstm-model-73"><a href="#lst-enh-lstm-model-73" aria-hidden="true" tabindex="-1"></a>            x, _ <span class="op">=</span> lstm(x)</span>
+<span id="lst-enh-lstm-model-74"><a href="#lst-enh-lstm-model-74" aria-hidden="true" tabindex="-1"></a>            x <span class="op">=</span> norm(x)</span>
+<span id="lst-enh-lstm-model-75"><a href="#lst-enh-lstm-model-75" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> residual.shape <span class="op">==</span> x.shape:</span>
+<span id="lst-enh-lstm-model-76"><a href="#lst-enh-lstm-model-76" aria-hidden="true" tabindex="-1"></a>                x <span class="op">=</span> x <span class="op">+</span> residual</span>
+<span id="lst-enh-lstm-model-77"><a href="#lst-enh-lstm-model-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="lst-enh-lstm-model-78"><a href="#lst-enh-lstm-model-78" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Output processing</span></span>
+<span id="lst-enh-lstm-model-79"><a href="#lst-enh-lstm-model-79" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> linear, dropout <span class="kw">in</span> <span class="bu">zip</span>(<span class="va">self</span>.output_layers[:<span class="op">-</span><span class="dv">1</span>], <span class="va">self</span>.dropouts[:<span class="op">-</span><span class="dv">1</span>]):</span>
+<span id="lst-enh-lstm-model-80"><a href="#lst-enh-lstm-model-80" aria-hidden="true" tabindex="-1"></a>            residual <span class="op">=</span> x</span>
+<span id="lst-enh-lstm-model-81"><a href="#lst-enh-lstm-model-81" aria-hidden="true" tabindex="-1"></a>            x <span class="op">=</span> linear(x)</span>
+<span id="lst-enh-lstm-model-82"><a href="#lst-enh-lstm-model-82" aria-hidden="true" tabindex="-1"></a>            x <span class="op">=</span> F.relu(x)</span>
+<span id="lst-enh-lstm-model-83"><a href="#lst-enh-lstm-model-83" aria-hidden="true" tabindex="-1"></a>            x <span class="op">=</span> dropout(x)</span>
+<span id="lst-enh-lstm-model-84"><a href="#lst-enh-lstm-model-84" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> residual.shape <span class="op">==</span> x.shape:</span>
+<span id="lst-enh-lstm-model-85"><a href="#lst-enh-lstm-model-85" aria-hidden="true" tabindex="-1"></a>                x <span class="op">=</span> x <span class="op">+</span> residual</span>
+<span id="lst-enh-lstm-model-86"><a href="#lst-enh-lstm-model-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="lst-enh-lstm-model-87"><a href="#lst-enh-lstm-model-87" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Final output layer</span></span>
+<span id="lst-enh-lstm-model-88"><a href="#lst-enh-lstm-model-88" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> <span class="va">self</span>.output_layers[<span class="op">-</span><span class="dv">1</span>](x)</span>
+<span id="lst-enh-lstm-model-89"><a href="#lst-enh-lstm-model-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="lst-enh-lstm-model-90"><a href="#lst-enh-lstm-model-90" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Add skip connection</span></span>
+<span id="lst-enh-lstm-model-91"><a href="#lst-enh-lstm-model-91" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> x <span class="op">+</span> <span class="va">self</span>.skip_connection(original_input)</span>
+<span id="lst-enh-lstm-model-92"><a href="#lst-enh-lstm-model-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="lst-enh-lstm-model-93"><a href="#lst-enh-lstm-model-93" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> x</span>
+<span id="lst-enh-lstm-model-94"><a href="#lst-enh-lstm-model-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="lst-enh-lstm-model-95"><a href="#lst-enh-lstm-model-95" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> configure_optimizers(<span class="va">self</span>):</span>
+<span id="lst-enh-lstm-model-96"><a href="#lst-enh-lstm-model-96" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> torch.optim.Adam(<span class="va">self</span>.parameters(), lr<span class="op">=</span><span class="va">self</span>.learning_rate)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-lst" id="lst-enh-lstm-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Listing&nbsp;3: Enhanced Long Short-Term Memory PyTorch Model
+</figcaption>
+</figure>
+</div>
+</div>
+</div></div>
+</section>
+
+<section id="deep-learning-models---transformer" class="title-slide slide level1 center">
+<h1>Deep Learning Models - Transformer</h1>
+<div class="columns">
+<div class="column" style="width:40%;">
+<ul>
+<li>Uses self-attention for wave pattern analysis</li>
+<li>Multi-head attention captures relationships across sequence</li>
+<li>Identifies both short-term and long-range dependencies</li>
+</ul>
+</div><div class="column" style="width:60%;">
+<div id="1574d1fb" class="cell" data-execution_count="22">
+<div id="lst-trans-model" class="python cell-code listing quarto-float quarto-figure quarto-figure-left" data-code-fold="false">
+<figure class="quarto-float quarto-float-lst">
+<div aria-describedby="lst-trans-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="sourceCode cell-code" id="lst-trans-model" data-code-fold="false"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="lst-trans-model-1"><a href="#lst-trans-model-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> TransformerModel(WavePredictionModel):</span>
+<span id="lst-trans-model-2"><a href="#lst-trans-model-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="lst-trans-model-3"><a href="#lst-trans-model-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(</span>
+<span id="lst-trans-model-4"><a href="#lst-trans-model-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>,</span>
+<span id="lst-trans-model-5"><a href="#lst-trans-model-5" aria-hidden="true" tabindex="-1"></a>        input_dim: <span class="bu">int</span>,</span>
+<span id="lst-trans-model-6"><a href="#lst-trans-model-6" aria-hidden="true" tabindex="-1"></a>        d_model: <span class="bu">int</span> <span class="op">=</span> <span class="dv">128</span>,</span>
+<span id="lst-trans-model-7"><a href="#lst-trans-model-7" aria-hidden="true" tabindex="-1"></a>        nhead: <span class="bu">int</span> <span class="op">=</span> <span class="dv">8</span>,</span>
+<span id="lst-trans-model-8"><a href="#lst-trans-model-8" aria-hidden="true" tabindex="-1"></a>        num_layers: <span class="bu">int</span> <span class="op">=</span> <span class="dv">4</span>,</span>
+<span id="lst-trans-model-9"><a href="#lst-trans-model-9" aria-hidden="true" tabindex="-1"></a>        dropout: <span class="bu">float</span> <span class="op">=</span> <span class="fl">0.2</span>,</span>
+<span id="lst-trans-model-10"><a href="#lst-trans-model-10" aria-hidden="true" tabindex="-1"></a>        learning_rate: <span class="bu">float</span> <span class="op">=</span> <span class="fl">1e-3</span>,</span>
+<span id="lst-trans-model-11"><a href="#lst-trans-model-11" aria-hidden="true" tabindex="-1"></a>    ):</span>
+<span id="lst-trans-model-12"><a href="#lst-trans-model-12" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>(input_dim, learning_rate)</span>
+<span id="lst-trans-model-13"><a href="#lst-trans-model-13" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.save_hyperparameters()  <span class="co"># Save all init parameters</span></span>
+<span id="lst-trans-model-14"><a href="#lst-trans-model-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="lst-trans-model-15"><a href="#lst-trans-model-15" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.input_projection <span class="op">=</span> nn.Linear(input_dim, d_model)</span>
+<span id="lst-trans-model-16"><a href="#lst-trans-model-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="lst-trans-model-17"><a href="#lst-trans-model-17" aria-hidden="true" tabindex="-1"></a>        encoder_layer <span class="op">=</span> nn.TransformerEncoderLayer(</span>
+<span id="lst-trans-model-18"><a href="#lst-trans-model-18" aria-hidden="true" tabindex="-1"></a>            d_model<span class="op">=</span>d_model,</span>
+<span id="lst-trans-model-19"><a href="#lst-trans-model-19" aria-hidden="true" tabindex="-1"></a>            nhead<span class="op">=</span>nhead,</span>
+<span id="lst-trans-model-20"><a href="#lst-trans-model-20" aria-hidden="true" tabindex="-1"></a>            dim_feedforward<span class="op">=</span>d_model <span class="op">*</span> <span class="dv">4</span>,</span>
+<span id="lst-trans-model-21"><a href="#lst-trans-model-21" aria-hidden="true" tabindex="-1"></a>            dropout<span class="op">=</span>dropout,</span>
+<span id="lst-trans-model-22"><a href="#lst-trans-model-22" aria-hidden="true" tabindex="-1"></a>            batch_first<span class="op">=</span><span class="va">True</span>,</span>
+<span id="lst-trans-model-23"><a href="#lst-trans-model-23" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="lst-trans-model-24"><a href="#lst-trans-model-24" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.transformer_encoder <span class="op">=</span> nn.TransformerEncoder(</span>
+<span id="lst-trans-model-25"><a href="#lst-trans-model-25" aria-hidden="true" tabindex="-1"></a>            encoder_layer, num_layers<span class="op">=</span>num_layers</span>
+<span id="lst-trans-model-26"><a href="#lst-trans-model-26" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="lst-trans-model-27"><a href="#lst-trans-model-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="lst-trans-model-28"><a href="#lst-trans-model-28" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.output_projection <span class="op">=</span> nn.Linear(d_model, input_dim)</span>
+<span id="lst-trans-model-29"><a href="#lst-trans-model-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="lst-trans-model-30"><a href="#lst-trans-model-30" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x: torch.Tensor) <span class="op">-&gt;</span> torch.Tensor:</span>
+<span id="lst-trans-model-31"><a href="#lst-trans-model-31" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> <span class="va">self</span>.input_projection(x)</span>
+<span id="lst-trans-model-32"><a href="#lst-trans-model-32" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> <span class="va">self</span>.transformer_encoder(x)</span>
+<span id="lst-trans-model-33"><a href="#lst-trans-model-33" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.output_projection(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-lst" id="lst-trans-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Listing&nbsp;4: Transformer PyTorch Model
+</figcaption>
+</figure>
+</div>
+</div>
+</div></div>
+</section>
+
+<section id="training" class="title-slide slide level1 center">
+<h1>Training</h1>
+<ul>
+<li>Input: 128 Samples</li>
+<li>Output: 128 Samples</li>
+<li>Optimizer: Adam</li>
+<li>Learning Rate: 0.001</li>
+</ul>
+<div id="tbl-model-arch" class="striped quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-float-tbl">
+<div aria-describedby="tbl-model-arch-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="table-striped">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 19%">
+<col style="width: 19%">
+<col style="width: 36%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Model Type</th>
+<th>Layers</th>
+<th>Epochs</th>
+<th>Special Features</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Baseline LSTM</td>
+<td>2</td>
+<td>25</td>
+<td>Basic implementation</td>
+</tr>
+<tr class="even">
+<td>Extended LSTM</td>
+<td>2</td>
+<td>100</td>
+<td>Same as baseline with longer training</td>
+</tr>
+<tr class="odd">
+<td>Deep LSTM</td>
+<td>4</td>
+<td>25</td>
+<td>Additional LSTM layers</td>
+</tr>
+<tr class="even">
+<td>Deeper LSTM</td>
+<td>6</td>
+<td>25</td>
+<td>Maximum layer depth tested</td>
+</tr>
+<tr class="odd">
+<td>Enhanced LSTM</td>
+<td>2</td>
+<td>25</td>
+<td>Bidirectional processing, skip connections, layer normalization</td>
+</tr>
+<tr class="even">
+<td>Basic Transformer</td>
+<td>2</td>
+<td>25</td>
+<td>Multi-head attention mechanism</td>
+</tr>
+<tr class="odd">
+<td>Enhanced Transformer</td>
+<td>2</td>
+<td>25</td>
+<td>Additional positional encoding, enhanced feed-forward network</td>
+</tr>
+</tbody>
+</table>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-tbl" id="tbl-model-arch-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;2: Model Architecture Specifications
+</figcaption>
+</figure>
+</div>
+<p>The full training code can be found in this projects GitHub Repository in the file <span class="math inline">\texttt{train\_window\_from\_spec.py}</span>.</p>
+</section>
+
+<section id="training-metrics---baseline-model" class="title-slide slide level1 center">
+<h1>Training Metrics - Baseline Model</h1>
+<div class="columns">
+<div class="column" style="width:30%;">
+<ul>
+<li>Training Metrics:
+<ul>
+<li>Mean Absolute Error (“Sum of Absolute Errors”)
+<ul>
+<li>Train</li>
+<li>Validate</li>
+</ul></li>
+</ul></li>
+</ul>
+<p><span class="math display">
+\mathrm{MAE} = \frac{\sum_{i - 1}^n | y_i - x_i|}{n}
+</span></p>
+<p>Where:</p>
+<ul>
+<li><span class="math inline">y_i</span> is the prediction</li>
+<li><span class="math inline">x_i</span> is the true value</li>
+<li><span class="math inline">n</span> is the number of data points</li>
+</ul>
+</div><div class="column" style="width:70%;">
+<div class="cell" data-layout-nrow="2" data-execution_count="23">
+<div id="fig-225-train-baseline" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-225-train-baseline-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-225-train-baseline" style="flex-basis: 100.0%;justify-content: flex-start;">
+<div id="fig-225-train-baseline-1" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-225-train-baseline-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-225-train-baseline-output-1.svg" data-ref-parent="fig-225-train-baseline">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-225-train-baseline-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) CDIP 225
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-225-train-baseline" style="flex-basis: 100.0%;justify-content: flex-start;">
+<div id="fig-225-train-baseline-2" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-225-train-baseline-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-225-train-baseline-output-2.svg" data-ref-parent="fig-225-train-baseline">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-225-train-baseline-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) CDIP 243
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-225-train-baseline-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;17: Baseline Model: Training vs.&nbsp;Validation Mean Absolute Error
+</figcaption>
+</figure>
+</div>
+</div>
+</div></div>
+</section>
+
+<section id="training-metrics-comparison" class="title-slide slide level1 center">
+<h1>Training Metrics Comparison</h1>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>100 Epoch LSTM</strong></p>
+<div class="cell" data-layout-nrow="2" data-execution_count="24">
+<div id="fig-225-train-100-lstm" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-225-train-100-lstm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-225-train-100-lstm" style="flex-basis: 100.0%;justify-content: flex-start;">
+<div id="fig-225-train-100-lstm-1" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-225-train-100-lstm-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-225-train-100-lstm-output-1.svg" data-ref-parent="fig-225-train-100-lstm">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-225-train-100-lstm-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) CDIP 225
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-225-train-100-lstm" style="flex-basis: 100.0%;justify-content: flex-start;">
+<div id="fig-225-train-100-lstm-2" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-225-train-100-lstm-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-225-train-100-lstm-output-2.svg" data-ref-parent="fig-225-train-100-lstm">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-225-train-100-lstm-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) CDIP 243
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-225-train-100-lstm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;18: 100 Epoch LSTM Model: Training vs.&nbsp;Validation Mean Absolute Error
+</figcaption>
+</figure>
+</div>
+</div>
+<p><strong>Transformer Model</strong></p>
+<div class="cell" data-layout-nrow="2" data-execution_count="25">
+<div id="fig-225-train-transformer" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-225-train-transformer-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-225-train-transformer" style="flex-basis: 100.0%;justify-content: flex-start;">
+<div id="fig-225-train-transformer-1" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-225-train-transformer-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-225-train-transformer-output-1.svg" data-ref-parent="fig-225-train-transformer">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-225-train-transformer-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) CDIP 225
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-225-train-transformer" style="flex-basis: 100.0%;justify-content: flex-start;">
+<div id="fig-225-train-transformer-2" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-225-train-transformer-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-225-train-transformer-output-2.svg" data-ref-parent="fig-225-train-transformer">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-225-train-transformer-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) CDIP 243
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-225-train-transformer-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;19: Transformer Model: Training vs.&nbsp;Validation Mean Absolute Error
+</figcaption>
+</figure>
+</div>
+</div>
+<p><strong>4 Layer LSTM Model</strong></p>
+<div class="cell" data-layout-nrow="2" data-execution_count="26">
+<div id="fig-train-4-layer-lstm" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-train-4-layer-lstm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-train-4-layer-lstm" style="flex-basis: 100.0%;justify-content: flex-start;">
+<div id="fig-train-4-layer-lstm-1" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-train-4-layer-lstm-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-train-4-layer-lstm-output-1.svg" data-ref-parent="fig-train-4-layer-lstm">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-train-4-layer-lstm-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) CDIP 225
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-train-4-layer-lstm" style="flex-basis: 100.0%;justify-content: flex-start;">
+<div id="fig-train-4-layer-lstm-2" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-train-4-layer-lstm-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-train-4-layer-lstm-output-2.svg" data-ref-parent="fig-train-4-layer-lstm">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-train-4-layer-lstm-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) CDIP 243
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-train-4-layer-lstm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;20: 4 Layer LSTM Model: Training vs.&nbsp;Validation Mean Absolute Error
+</figcaption>
+</figure>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<p><strong>6 Layer LSTM Model</strong></p>
+<div class="cell" data-layout-nrow="2" data-execution_count="27">
+<div id="fig-train-6-layer-lstm" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-train-6-layer-lstm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-train-6-layer-lstm" style="flex-basis: 100.0%;justify-content: flex-start;">
+<div id="fig-train-6-layer-lstm-1" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-train-6-layer-lstm-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-train-6-layer-lstm-output-1.svg" data-ref-parent="fig-train-6-layer-lstm">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-train-6-layer-lstm-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) CDIP 225
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-train-6-layer-lstm" style="flex-basis: 100.0%;justify-content: flex-start;">
+<div id="fig-train-6-layer-lstm-2" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-train-6-layer-lstm-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-train-6-layer-lstm-output-2.svg" data-ref-parent="fig-train-6-layer-lstm">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-train-6-layer-lstm-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) CDIP 243
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-train-6-layer-lstm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;21: 6 Layer LSTM Model: Training vs.&nbsp;Validation Mean Absolute Error
+</figcaption>
+</figure>
+</div>
+</div>
+<p><strong>Enhanced Transformer Model</strong></p>
+<div class="cell" data-layout-nrow="2" data-execution_count="28">
+<div id="fig-train-enhanced-trans" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-train-enhanced-trans-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-train-enhanced-trans" style="flex-basis: 100.0%;justify-content: flex-start;">
+<div id="fig-train-enhanced-trans-1" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-train-enhanced-trans-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-train-enhanced-trans-output-1.svg" data-ref-parent="fig-train-enhanced-trans">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-train-enhanced-trans-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) CDIP 225
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-train-enhanced-trans" style="flex-basis: 100.0%;justify-content: flex-start;">
+<div id="fig-train-enhanced-trans-2" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-train-enhanced-trans-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-train-enhanced-trans-output-2.svg" data-ref-parent="fig-train-enhanced-trans">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-train-enhanced-trans-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) CDIP 243
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-train-enhanced-trans-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;22: Enhanced Transformer Model: Training vs.&nbsp;Validation Mean Absolute Error
+</figcaption>
+</figure>
+</div>
+</div>
+<p><strong>Enhanced LSTM Model</strong></p>
+<div class="cell" data-layout-nrow="2" data-execution_count="29">
+<div id="fig-train-enhanced-lstm" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-train-enhanced-lstm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-train-enhanced-lstm" style="flex-basis: 100.0%;justify-content: flex-start;">
+<div id="fig-train-enhanced-lstm-1" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-train-enhanced-lstm-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-train-enhanced-lstm-output-1.svg" data-ref-parent="fig-train-enhanced-lstm">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-train-enhanced-lstm-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) CDIP 225
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-train-enhanced-lstm" style="flex-basis: 100.0%;justify-content: flex-start;">
+<div id="fig-train-enhanced-lstm-2" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-train-enhanced-lstm-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-train-enhanced-lstm-output-2.svg" data-ref-parent="fig-train-enhanced-lstm">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-train-enhanced-lstm-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) CDIP 243
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-train-enhanced-lstm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;23: Enhanced LSTM Model: Training vs.&nbsp;Validation Mean Absolute Error
+</figcaption>
+</figure>
+</div>
+</div>
+</div></div>
+</section>
+
+<section id="results---baseline-lstm-timeseries" class="title-slide slide level1 center">
+<h1>Results - Baseline LSTM Timeseries</h1>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>CDIP 225 - Kaneohe Bay, HI</strong></p>
+<div id="cell-fig-lstm-baseline-test-section-1" class="cell" data-execution_count="34">
+<div class="cell-output cell-output-display">
+<div id="fig-lstm-baseline-test-section-1" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-lstm-baseline-test-section-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-lstm-baseline-test-section-1-output-1.svg">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-lstm-baseline-test-section-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;24: Baseline LSTM - CDIP 225 - Test Section 1
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-fig-lstm-baseline-test-section-2" class="cell" data-execution_count="35">
+<div class="cell-output cell-output-display">
+<div id="fig-lstm-baseline-test-section-2" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-lstm-baseline-test-section-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-lstm-baseline-test-section-2-output-1.svg">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-lstm-baseline-test-section-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;25: Baseline LSTM - CDIP 225 - Test Section 2
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-fig-lstm-baseline-test-section-3" class="cell" data-execution_count="36">
+<div class="cell-output cell-output-display">
+<div id="fig-lstm-baseline-test-section-3" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-lstm-baseline-test-section-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-lstm-baseline-test-section-3-output-1.svg">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-lstm-baseline-test-section-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;26: Baseline LSTM - CDIP 225 - Test Section 3
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<p><strong>CDIP 243 - Nags Head, NC</strong></p>
+<div id="cell-fig-lstm-baseline-test-section-1-nags" class="cell" data-execution_count="38">
+<div class="cell-output cell-output-display">
+<div id="fig-lstm-baseline-test-section-1-nags" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-lstm-baseline-test-section-1-nags-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-lstm-baseline-test-section-1-nags-output-1.svg">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-lstm-baseline-test-section-1-nags-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;27: Baseline LSTM - CDIP 243 - Test Section 1
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-fig-lstm-baseline-test-section-2-nags" class="cell" data-execution_count="39">
+<div class="cell-output cell-output-display">
+<div id="fig-lstm-baseline-test-section-2-nags" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-lstm-baseline-test-section-2-nags-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-lstm-baseline-test-section-2-nags-output-1.svg">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-lstm-baseline-test-section-2-nags-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;28: Baseline LSTM - CDIP 243 - Test Section 2
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-fig-lstm-baseline-test-section-3-nags" class="cell" data-execution_count="40">
+<div class="cell-output cell-output-display">
+<div id="fig-lstm-baseline-test-section-3-nags" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-lstm-baseline-test-section-3-nags-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-lstm-baseline-test-section-3-nags-output-1.svg">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-lstm-baseline-test-section-3-nags-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;29: Baseline LSTM - CDIP 243 - Test Section 3
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
+<div class="columns">
+<div class="column" style="width:50%;">
+<ul>
+<li>128-sample prediction windows vs.&nbsp;actual wave data</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<ul>
+<li>Compares across wave conditions (<span class="math inline">H_{m_0}</span>, <span class="math inline">T_e</span>)</li>
+</ul>
+</div></div>
+</section>
+
+<section id="results---quantitative-visualization" class="title-slide slide level1 center">
+<h1>Results - Quantitative Visualization</h1>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Baseline Model</strong></p>
+<div class="cell" data-layout-nrow="2" data-execution_count="41">
+<div id="fig-lstm-baseline-test-all" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-lstm-baseline-test-all-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-lstm-baseline-test-all" style="flex-basis: 100.0%;justify-content: flex-start;">
+<div id="fig-lstm-baseline-test-all-1" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-lstm-baseline-test-all-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-lstm-baseline-test-all-output-1.svg" data-ref-parent="fig-lstm-baseline-test-all">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-lstm-baseline-test-all-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) CDIP 225
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-lstm-baseline-test-all" style="flex-basis: 100.0%;justify-content: flex-start;">
+<div id="fig-lstm-baseline-test-all-2" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-lstm-baseline-test-all-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-lstm-baseline-test-all-output-2.svg" data-ref-parent="fig-lstm-baseline-test-all">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-lstm-baseline-test-all-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) CDIP 243
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-lstm-baseline-test-all-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;30: Baseline LSTM - All Test Sections, Train Blue, Test Orange
+</figcaption>
+</figure>
+</div>
+</div>
+<p><strong>Transformer Model</strong></p>
+<div class="cell" data-layout-nrow="2" data-execution_count="42">
+<div id="fig-transformer-test-all" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-transformer-test-all-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-transformer-test-all" style="flex-basis: 100.0%;justify-content: flex-start;">
+<div id="fig-transformer-test-all-1" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-transformer-test-all-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-transformer-test-all-output-1.svg" data-ref-parent="fig-transformer-test-all">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-transformer-test-all-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) CDIP 225
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-transformer-test-all" style="flex-basis: 100.0%;justify-content: flex-start;">
+<div id="fig-transformer-test-all-2" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-transformer-test-all-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-transformer-test-all-output-2.svg" data-ref-parent="fig-transformer-test-all">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-transformer-test-all-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) CDIP 243
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-transformer-test-all-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;31: Transformer - All Test Sections
+</figcaption>
+</figure>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<p><strong>LSTM 100 Epoch Model</strong></p>
+<div class="cell" data-layout-nrow="2" data-execution_count="43">
+<div id="fig-transformer-lstm-100" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-transformer-lstm-100-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-transformer-lstm-100" style="flex-basis: 100.0%;justify-content: flex-start;">
+<div id="fig-transformer-lstm-100-1" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-transformer-lstm-100-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-transformer-lstm-100-output-1.svg" data-ref-parent="fig-transformer-lstm-100">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-transformer-lstm-100-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) CDIP 225
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-transformer-lstm-100" style="flex-basis: 100.0%;justify-content: flex-start;">
+<div id="fig-transformer-lstm-100-2" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-transformer-lstm-100-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-transformer-lstm-100-output-2.svg" data-ref-parent="fig-transformer-lstm-100">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-transformer-lstm-100-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) CDIP 243
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-transformer-lstm-100-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;32: LSTM 100 Epoch - All Test Sections
+</figcaption>
+</figure>
+</div>
+</div>
+<p><strong>LSTM 4 Layers Model</strong></p>
+<div class="cell" data-layout-nrow="2" data-execution_count="44">
+<div id="fig-transformer-lstm-4-layer" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-transformer-lstm-4-layer-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-transformer-lstm-4-layer" style="flex-basis: 100.0%;justify-content: flex-start;">
+<div id="fig-transformer-lstm-4-layer-1" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-transformer-lstm-4-layer-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-transformer-lstm-4-layer-output-1.svg" data-ref-parent="fig-transformer-lstm-4-layer">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-transformer-lstm-4-layer-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) CDIP 225
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-transformer-lstm-4-layer" style="flex-basis: 100.0%;justify-content: flex-start;">
+<div id="fig-transformer-lstm-4-layer-2" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-transformer-lstm-4-layer-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-transformer-lstm-4-layer-output-2.svg" data-ref-parent="fig-transformer-lstm-4-layer">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-transformer-lstm-4-layer-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) CDIP 243
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-transformer-lstm-4-layer-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;33: LSTM 4 Layer - All Test Sections
+</figcaption>
+</figure>
+</div>
+</div>
+</div></div>
+</section>
+
+<section id="results-comparison---mae" class="title-slide slide level1 center">
+<h1>Results Comparison - MAE</h1>
+<div id="cell-fig-results-mae-comparison" class="cell" data-execution_count="46">
+<div class="cell-output cell-output-display">
+<div id="fig-results-mae-comparison" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-results-mae-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-results-mae-comparison-output-1.svg">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-results-mae-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;34: Mean Absolute Error Comparison by Model (Lower is better)
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-fig-results-mae-comparison-by-station" class="cell" data-execution_count="47">
+<div class="cell-output cell-output-display">
+<div id="fig-results-mae-comparison-by-station" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-results-mae-comparison-by-station-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-results-mae-comparison-by-station-output-1.svg">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-results-mae-comparison-by-station-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;35: Mean Absolute Error Comparison by Station (Lower is better)
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+
+<section id="results---r2" class="title-slide slide level1 center">
+<h1>Results - <span class="math inline">R^2</span></h1>
+<div id="cell-fig-results-r2-comparison" class="cell" data-execution_count="48">
+<div class="cell-output cell-output-display">
+<div id="fig-results-r2-comparison" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-results-r2-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-results-r2-comparison-output-1.svg">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-results-r2-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;36: <span class="math inline">R^2</span> Comparison by Model
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-fig-results-r2-comparison-by-station" class="cell" data-execution_count="49">
+<div class="cell-output cell-output-display">
+<div id="fig-results-r2-comparison-by-station" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-results-r2-comparison-by-station-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-results-r2-comparison-by-station-output-1.svg">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-results-r2-comparison-by-station-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;37: <span class="math inline">R^2</span> Comparison by Station
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+
+<section id="pearsons-correlation-rho" class="title-slide slide level1 center">
+<h1>Pearson’s Correlation [<span class="math inline">\rho</span>]</h1>
+<div id="cell-fig-results-correlation-comparison" class="cell" data-execution_count="50">
+<div class="cell-output cell-output-display">
+<div id="fig-results-correlation-comparison" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-results-correlation-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-results-correlation-comparison-output-1.svg">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-results-correlation-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;38: Pearson’s Correlation Comparison by Model
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-fig-results-correlation-comparison-by-station" class="cell" data-execution_count="51">
+<div class="cell-output cell-output-display">
+<div id="fig-results-correlation-comparison-by-station" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-results-correlation-comparison-by-station-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="presentation_files/figure-revealjs/fig-results-correlation-comparison-by-station-output-1.svg">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-results-correlation-comparison-by-station-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;39: Pearson’s Correlation Comparison by Station
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+
+<section id="results-summary" class="title-slide slide level1 center">
+<h1>Results Summary</h1>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Model Performance Metrics:</strong></p>
+<ul>
+<li>Evaluation using MAE, <span class="math inline">R^2</span>, and correlation (<span class="math inline">\rho</span>)</li>
+<li>4-layer LSTM achieved best results:
+<ul>
+<li>WETS: MAE = <span class="math inline">0.50\,\mathrm{m}</span>, <span class="math inline">R^2</span> = 0.89, <span class="math inline">\rho</span> = 0.94</li>
+<li>Nags Head: MAE = <span class="math inline">0.87\,\mathrm{m}</span>, <span class="math inline">R^2</span> = 0.87, <span class="math inline">\rho</span> = 0.93</li>
+</ul></li>
+</ul>
+</div><div class="column" style="width:50%;">
+<p><strong>Key Findings:</strong></p>
+<ul>
+<li>LSTM models outperformed Transformers consistently</li>
+<li>Increased training epochs improved baseline LSTM</li>
+<li>WETS predictions more accurate than Nags Head</li>
+<li>Enhanced architectures showed no additional benefits</li>
+</ul>
+</div></div>
+</section>
+
+<section id="conclusion" class="title-slide slide level1 center">
+<h1>Conclusion</h1>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Project Overview:</strong></p>
+<ul>
+<li>Built deep learning models for wave prediction at two sites</li>
+<li>Processed and sampled data to capture diverse wave states</li>
+<li>Evaluated using MAE, <span class="math inline">R^2</span>, and correlation metrics</li>
+</ul>
+<p><strong>Key Results:</strong></p>
+<ul>
+<li>4-layer LSTM performed best (WETS: MAE = <span class="math inline">0.50\,\mathrm{m}</span>)</li>
+<li>Better accuracy at WETS vs.&nbsp;Nags Head</li>
+<li>Added complexity showed diminishing returns</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<p><strong>Technical Insights:</strong></p>
+<ul>
+<li>LSTMs excel at capturing wave patterns</li>
+<li>Transformers struggled with wave dynamics</li>
+<li>Extended training improved performance</li>
+<li>Structured sampling proved effective</li>
+</ul>
+<p><strong>Future Directions:</strong></p>
+<ul>
+<li>Extend to north/east displacement predictions</li>
+<li>Incorporate physics-informed neural networks</li>
+<li>Test at additional CDIP buoys</li>
+<li>Optimize for real-time applications</li>
+<li>Test a unified model</li>
+</ul>
+</div></div>
+</section>
+
+<section id="thank-you" class="title-slide slide level1 center">
+<h1>Thank You!</h1>
+
+</section>
+
+<section id="references" class="title-slide slide level1 smaller scrollable">
+<h1>References</h1>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-pytorch" class="csl-entry" role="listitem">
+Ansel, Jason, Edward Yang, Horace He, Natalia Gimelshein, Animesh Jain, Michael Voznesensky, Bin Bao, et al. 2024. <span>“<span class="nocase">PyTorch 2: Faster Machine Learning Through Dynamic Python Bytecode Transformation and Graph Compilation</span>.”</span> In <em>29th ACM International Conference on Architectural Support for Programming Languages and Operating Systems, Volume 2 (ASPLOS ’24)</em>. ACM. <a href="https://doi.org/10.1145/3620665.3640366">https://doi.org/10.1145/3620665.3640366</a>.
+</div>
+<div id="ref-cdip_wets" class="csl-entry" role="listitem">
+Coastal Data Information Program. 2023. <span>“Station 225: Kaneohe Bay, WETS, HI - Wave, Sea Surface Temperature, and Ocean Current Time-Series Data.”</span> Scripps Institution of Oceanography; USACE/PACIOOS; UC San Diego Library Digital Collections. <a href="https://doi.org/10.18437/C7WC72">https://doi.org/10.18437/C7WC72</a>.
+</div>
+<div id="ref-LSTM_paper" class="csl-entry" role="listitem">
+Hochreiter, Sepp, and Jürgen Schmidhuber. 1997. <span>“Long Short-Term Memory.”</span> <em>Neural Computation</em> 9 (8): 1735–80. <a href="https://doi.org/10.1162/neco.1997.9.8.1735">https://doi.org/10.1162/neco.1997.9.8.1735</a>.
+</div>
+<div id="ref-attention_paper" class="csl-entry" role="listitem">
+Vaswani, Ashish, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N. Gomez, Lukasz Kaiser, and Illia Polosukhin. 2023. <span>“Attention Is All You Need.”</span> <a href="https://arxiv.org/abs/1706.03762">https://arxiv.org/abs/1706.03762</a>.
+</div>
+<div id="ref-wiki:lstm_cell" class="csl-entry" role="listitem">
+Wikimedia Commons. 2024. <span>“File:the LSTM Cell.svg — Wikimedia Commons<span>,</span> the Free Media Repository.”</span> <a href="https://commons.wikimedia.org/w/index.php?title=File:The_LSTM_Cell.svg&amp;oldid=928752394">https://commons.wikimedia.org/w/index.php?title=File:The_LSTM_Cell.svg&amp;oldid=928752394</a>.
+</div>
+</div>
+</section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="site_libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="site_libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="site_libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="site_libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="site_libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="site_libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="site_libs/revealjs/plugin/search/search.js"></script>
+  <script src="site_libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: false,
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
+      const onCopySuccess = function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
+      });
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+        const config = {
+          allowHTML: true,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start',
+        };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
+    
+
+</body></html>

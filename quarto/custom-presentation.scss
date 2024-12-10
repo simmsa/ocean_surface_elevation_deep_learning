@@ -1,0 +1,47 @@
+/*-- scss:defaults --*/
+
+// fonts
+$font-family-sans-serif: system-ui, sans-serif;
+$font-family-monospace: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace;
+
+// colors
+$body-bg: #fff !default;
+$body-color: #000 !default;
+// $link-color: #51483d !default;
+// $selection-bg: #26351c !default;
+
+// headings
+$presentation-heading-font: "system-ui, sans-serif";
+
+$presentation-font-size-root: 20px;
+$presentation-font-smaller: 0.8;
+$presentation-line-height: 1.4;
+
+/*-- scss:rules --*/
+
+.quarto-figure {
+  padding-bottom: 0px !important;
+  margin-bottom: 0px !important;
+}
+
+figcaption, .quarto-float-caption {
+  padding-top: 2px;
+  font-size: 10px !important;
+  font-style: italic;
+  font-weight: 300;
+  text-align: center;
+  color: #333;
+}
+
+.nodeLabel {
+  font-size: 28 !important;
+}
+
+img {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+code {
+  color: #000;
+}

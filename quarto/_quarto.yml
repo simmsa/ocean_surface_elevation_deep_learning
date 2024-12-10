@@ -1,0 +1,49 @@
+project:
+  type: website
+  output-dir: "../docs"
+
+website:
+  title: "Using Deep Learning to Model Ocean Waves using Real World Data"
+
+format:
+  html:
+      mainfont: "system-ui, sans-serif"
+      monofont: "ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace"
+      theme: [cosmo, custom.scss]
+      html-math-method: "katex"
+      highlight-style: monokai
+      fig-format: svg
+      code-fold: true
+      code-line-numbers: true
+      embed-resources: true
+      self-contained-math: true
+      toc-title: 'Table of Contents'
+      toc-location: left
+      toc-depth: 5
+      toc-expand: 1
+      number-sections: true
+      table-of-contents: true
+  ipynb:
+      number-sections: true
+      table-of-contents: true
+      embed-resources: true
+  typst:
+      number-sections: true
+      table-of-contents: true
+      section-numbering: 1.1.1
+      fig-format: svg
+      mermaid-format: png
+      # fig-dpi: 200
+      echo: false
+
+format-links:
+  - html
+  - format: ipynb
+    text: Jupyter Notebook
+    icon: journal-code
+  - format: typst
+    text: PDF
+    icon: file-pdf
+
+presentation.qmd:
+  format: revealjs
